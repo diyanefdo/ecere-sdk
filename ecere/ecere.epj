@@ -465,6 +465,57 @@ if distributed with the Ecere SDK Windows installer.
          ]
       },
       {
+         "Name" : "Lumin",
+         "Options" : {
+            "Debug" : true,
+            "Optimization" : "None",
+            "PreprocessorDefinitions" : [
+               "ECERE_NOFONTCONFIG",
+               "HIGH_DPI",
+               "ECERE_NOSSL",
+               "_GLES2",
+               "_DEBUG",
+               "ECERE_STATIC"
+            ],
+            "IncludeDirs" : [
+               "../deps/jpeg-9a",
+               "../deps/libpng-1.6.12",
+               "../deps/libungif-4.1.1/lib",
+               "../deps/zlib",
+               "../deps/freetype-2.3.12/include",
+               "../deps/glext",
+               "../deps/curl-7.51.0/include"
+            ],
+            "TargetType" : "StaticLibrary",
+            "TargetFileName" : "ecereStatic",
+            "FastMath" : true
+         },
+         "Platforms" : [
+            {
+               "Name" : "linux",
+               "Options" : {
+                  "Libraries" : [
+                     "m",
+                     "dl",
+                     "ungif",
+                     "log",
+                     "android",
+                     "EGL",
+                     "GLESv3"
+                  ],
+                  "LibraryDirs" : [
+                     "../deps/libungif-4.1.1/obj/release.$(PLATFORM).$(COMPILER)",
+                     "../deps/libpng-1.6.12/obj/release.$(PLATFORM).$(COMPILER)",
+                     "../deps/jpeg-9a/obj/release.$(PLATFORM).$(COMPILER)",
+                     "../deps/freetype-2.3.12/obj/release.$(PLATFORM).$(COMPILER)",
+                     "../deps/curl-7.51.0/obj/release.$(PLATFORM).$(COMPILER)",
+                     "../deps/etc2comp/EtcLib/obj/android.$(PLATFORM).$(COMPILER)"
+                  ]
+               }
+            }
+         ]
+      },
+      {
          "Name" : "GLES",
          "Options" : {
             "PreprocessorDefinitions" : [
@@ -1027,6 +1078,12 @@ if distributed with the Ecere SDK Windows installer.
                                        }
                                     },
                                     {
+                                       "Name" : "Lumin",
+                                       "Options" : {
+                                          "ExcludeFromBuild" : false
+                                       }
+                                    },
+                                    {
                                        "Name" : "StaticGLES",
                                        "Options" : {
                                           "ExcludeFromBuild" : false
@@ -1081,6 +1138,12 @@ if distributed with the Ecere SDK Windows installer.
                                     },
                                     {
                                        "Name" : "Android",
+                                       "Options" : {
+                                          "ExcludeFromBuild" : false
+                                       }
+                                    },
+                                    {
+                                       "Name" : "Lumin",
                                        "Options" : {
                                           "ExcludeFromBuild" : false
                                        }
@@ -1145,6 +1208,12 @@ if distributed with the Ecere SDK Windows installer.
                                        }
                                     },
                                     {
+                                       "Name" : "Lumin",
+                                       "Options" : {
+                                          "ExcludeFromBuild" : false
+                                       }
+                                    },
+                                    {
                                        "Name" : "StaticGLES",
                                        "Options" : {
                                           "ExcludeFromBuild" : false
@@ -1170,6 +1239,12 @@ if distributed with the Ecere SDK Windows installer.
                                  "Configurations" : [
                                     {
                                        "Name" : "Android",
+                                       "Options" : {
+                                          "ExcludeFromBuild" : false
+                                       }
+                                    },
+                                    {
+                                       "Name" : "Lumin",
                                        "Options" : {
                                           "ExcludeFromBuild" : false
                                        }
@@ -1264,6 +1339,12 @@ if distributed with the Ecere SDK Windows installer.
                                        }
                                     },
                                     {
+                                       "Name" : "Lumin",
+                                       "Options" : {
+                                          "ExcludeFromBuild" : false
+                                       }
+                                    },
+                                    {
                                        "Name" : "Installer",
                                        "Options" : {
                                           "ExcludeFromBuild" : true
@@ -1291,6 +1372,12 @@ if distributed with the Ecere SDK Windows installer.
                                     },
                                     {
                                        "Name" : "Android",
+                                       "Options" : {
+                                          "ExcludeFromBuild" : false
+                                       }
+                                    },
+                                    {
+                                       "Name" : "Lumin",
                                        "Options" : {
                                           "ExcludeFromBuild" : false
                                        }
@@ -1719,6 +1806,17 @@ if distributed with the Ecere SDK Windows installer.
                               },
                               {
                                  "Name" : "Android",
+                                 "Platforms" : [
+                                    {
+                                       "Name" : "linux",
+                                       "Options" : {
+                                          "ExcludeFromBuild" : true
+                                       }
+                                    }
+                                 ]
+                              },
+                              {
+                                 "Name" : "Lumin",
                                  "Platforms" : [
                                     {
                                        "Name" : "linux",
@@ -2160,6 +2258,17 @@ if distributed with the Ecere SDK Windows installer.
                                  ]
                               },
                               {
+                                 "Name" : "Lumin",
+                                 "Platforms" : [
+                                    {
+                                       "Name" : "linux",
+                                       "Options" : {
+                                          "ExcludeFromBuild" : true
+                                       }
+                                    }
+                                 ]
+                              },
+                              {
                                  "Name" : "Emscripten",
                                  "Platforms" : [
                                     {
@@ -2489,6 +2598,17 @@ if distributed with the Ecere SDK Windows installer.
                                  ]
                               },
                               {
+                                 "Name" : "Lumin",
+                                 "Platforms" : [
+                                    {
+                                       "Name" : "linux",
+                                       "Options" : {
+                                          "ExcludeFromBuild" : true
+                                       }
+                                    }
+                                 ]
+                              },
+                              {
                                  "Name" : "Emscripten",
                                  "Platforms" : [
                                     {
@@ -2656,6 +2776,17 @@ if distributed with the Ecere SDK Windows installer.
                                  ]
                               },
                               {
+                                 "Name" : "Lumin",
+                                 "Platforms" : [
+                                    {
+                                       "Name" : "linux",
+                                       "Options" : {
+                                          "ExcludeFromBuild" : true
+                                       }
+                                    }
+                                 ]
+                              },
+                              {
                                  "Name" : "Emscripten",
                                  "Platforms" : [
                                     {
@@ -2701,6 +2832,17 @@ if distributed with the Ecere SDK Windows installer.
                               },
                               {
                                  "Name" : "MinEmscripten",
+                                 "Options" : {
+                                    "ExcludeFromBuild" : false
+                                 }
+                              }
+                           ]
+                        },
+                        {
+                           "FileName" : "LuminInterface.ec",
+                           "Configurations" : [
+                              {
+                                 "Name" : "Lumin",
                                  "Options" : {
                                     "ExcludeFromBuild" : false
                                  }
@@ -2868,6 +3010,12 @@ if distributed with the Ecere SDK Windows installer.
                         },
                         {
                            "Name" : "Android",
+                           "Options" : {
+                              "ExcludeFromBuild" : true
+                           }
+                        },
+                        {
+                           "Name" : "Lumin",
                            "Options" : {
                               "ExcludeFromBuild" : true
                            }
@@ -3306,6 +3454,12 @@ if distributed with the Ecere SDK Windows installer.
                "Options" : {
                   "ExcludeFromBuild" : false
                }
+            },
+            {
+               "Name" : "Lumin",
+               "Options" : {
+                  "ExcludeFromBuild" : false
+               }
             }
          ]
       },
@@ -3317,6 +3471,12 @@ if distributed with the Ecere SDK Windows installer.
          "Configurations" : [
             {
                "Name" : "Android",
+               "Options" : {
+                  "ExcludeFromBuild" : false
+               }
+            },
+            {
+               "Name" : "Lumin",
                "Options" : {
                   "ExcludeFromBuild" : false
                }

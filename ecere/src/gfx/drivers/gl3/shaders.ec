@@ -127,7 +127,12 @@ private:
          return true;
       }
       else
+      {
          printf("Error accessing shader %s.\n", file);
+#if defined(__LUMIN__)
+         PrintLn("Error accessing shader ", file, ".");
+#endif
+      }
       return false;
    }
 
@@ -194,9 +199,9 @@ public:
             glGetShaderiv(vShader, GL_COMPILE_STATUS, &vStatus);
             glGetShaderInfoLog(vShader, sizeof(compileLog), null, compileLog);
 
-#ifndef _DEBUG
+//#ifndef _DEBUG
             if(compileLog[0])
-#endif
+//#endif
             {
                puts("Vertex Shader Compile Log:");
                puts("--------------------------");
@@ -206,9 +211,9 @@ public:
             glCompileShader(fShader);
             glGetShaderiv(vShader, GL_COMPILE_STATUS, &fStatus);
             glGetShaderInfoLog(fShader, sizeof(compileLog), null, compileLog);
-#ifndef _DEBUG
+//#ifndef _DEBUG
             if(compileLog[0])
-#endif
+//#endif
             {
                puts("");
                puts("");
@@ -229,9 +234,9 @@ public:
                glLinkProgram(program);
                glGetProgramInfoLog(program, sizeof(compileLog), null, compileLog);
 
-   #ifndef _DEBUG
+   //#ifndef _DEBUG
                if(compileLog[0])
-   #endif
+   //#endif
                {
                   puts("");
                   puts("");
@@ -242,9 +247,9 @@ public:
 
                glValidateProgram(program);
 
-   #ifndef _DEBUG
+   //#ifndef _DEBUG
                if(compileLog[0])
-   #endif
+   //#endif
                {
                   puts("");
                   puts("");

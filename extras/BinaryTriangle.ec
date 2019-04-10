@@ -1,116 +1,105 @@
 public import IMPORT_STATIC "ecere"
 
+public define invalidTriangleVertex = 0xFFFFFFFF;
+
 public struct BinaryTriangle
 {
    BinaryTriangle * left, * right, * bottom;
-   BinaryTriangle * leftChild, * rightChild;
-   Point v0,va,v1,vc;
-   uint tv0,tva,tv1,tvc;
+   BinaryTriangle * leftTriangle, * rightTriangle;
+   uint tv0, tva, tv1, tvc;
    int index;
+
+   private static inline uint ::midPoint(int v0, int v1, int stride)
+   {
+      int y0 = v0 / stride, y1 = v1 / stride;
+      return Abs(y0 - y1) >= 2 || Abs((v0 - y0 * stride) - (v1 - y1 * stride)) >= 2 ? ((v0 + v1) >> 1) : invalidTriangleVertex;
+   }
+
+   private void createChildTriangles(BinaryTriangle * stack, int * stackIndex, int stride)
+   {
+      BinaryTriangle * r = right, * l = left;
+      BinaryTriangle * lt = stack + (*stackIndex)++;
+      BinaryTriangle * rt = stack + (*stackIndex)++;
+
+      leftTriangle = lt;
+      rightTriangle = rt;
+
+      if(l)
+      {
+         if(l->bottom == this)
+            l->bottom = lt;
+         else if(l->left == this)
+            l->left = lt;
+         else
+            l->right = lt;
+      }
+
+      if(r)
+      {
+         if(r->bottom == this)
+            r->bottom = rt;
+         else if(r->right == this)
+            r->right = rt;
+         else
+            r->left = rt;
+      }
+
+      *lt =
+      {
+         index = index << 1,
+         left = rt, bottom = l,
+         tv0 = tva, tva = tvc, tv1 = tv0,
+         tvc = midPoint(tv0, tva, stride);
+      };
+
+      *rt =
+      {
+         index = (index << 1) + 1,
+         right = lt, bottom = r,
+         tv0 = tv1, tva = tvc, tv1 = tva,
+         tvc = midPoint(tv1, tva, stride);
+      };
+   }
 
    public void clear()
    {
-      leftChild = null;
-      rightChild = null;
+      leftTriangle = null;
+      rightTriangle = null;
       left = null;
       right = null;
       bottom = null;
    }
 
-   private void createChildTriangles(BinaryTriangle * stack, int * stackIndex)
+   public bool split(BinaryTriangle * stack, int * stackIndex, int stride)
    {
-      BinaryTriangle * leftChild, * rightChild;
-      BinaryTriangle * right, * left;
+      bool result = false;
 
-      leftChild =  this.leftChild =  stack + (*stackIndex)++;
-      rightChild = this.rightChild = stack + (*stackIndex)++;
-
-      leftChild->left = rightChild;
-      rightChild->right = leftChild;
-
-      leftChild->bottom = this.left;
-      rightChild->bottom = this.right;
-
-      left = this.left;
-      if(left)
-      {
-         if(left->bottom == this)
-            left->bottom = leftChild;
-         else
-         {
-            if(left->left == this)
-               left->left = leftChild;
-            else
-               left->right = leftChild;
-         }
-      }
-
-      right = this.right;
-      if(right)
-      {
-         if(right->bottom == this)
-            right->bottom = rightChild;
-         else
-         {
-            if(right->right == this)
-               right->right = rightChild;
-            else
-               right->left = rightChild;
-         }
-      }
-
-      leftChild->index = index<<1;
-      rightChild->index = leftChild->index+1;
-      leftChild->leftChild = null;
-      rightChild->leftChild = null;
-      leftChild->rightChild = null;
-      rightChild->rightChild = null;
-
-      leftChild->tv0 = tva;
-      rightChild->tv1 = tva;
-      leftChild->tva = tvc;
-      rightChild->tva = tvc;
-      leftChild->tv1 = tv0;
-      rightChild->tv0 = tv1;
-
-      leftChild->tvc = (tva + tv0) >> 1;
-      rightChild->tvc = (tv1 + tva) >> 1;
-
-      leftChild->v0 = va;
-      rightChild->v1 = va;
-      leftChild->va = vc;
-      rightChild->va = vc;
-      leftChild->v1 = v0;
-      rightChild->v0 = v1;
-
-      leftChild->vc.x = (va.x + v0.x) >> 1;
-      leftChild->vc.y = (va.y + v0.y) >> 1;
-      rightChild->vc.x = (v1.x + va.x) >> 1;
-      rightChild->vc.y = (v1.y + va.y) >> 1;
-   }
-
-   public bool split(BinaryTriangle * stack, int * stackIndex)
-   {
       if(bottom)
       {
-         if(bottom->bottom == this || bottom->split(stack, stackIndex))
+         // Opposite triangle needs to be split first to avoid T-junction
+         if(bottom->tvc != invalidTriangleVertex && (bottom->bottom == this || bottom->split(stack, stackIndex, stride)))
          {
-            split(stack, stackIndex);
-            bottom->split(stack, stackIndex);
-            leftChild->right = bottom->rightChild;
-            rightChild->left = bottom->leftChild;
-            bottom->leftChild->right = rightChild;
-            bottom->rightChild->left = leftChild;
-            return true;
+            BinaryTriangle * b, * blt, * brt;
+
+            createChildTriangles(stack, stackIndex, stride);
+            bottom->createChildTriangles(stack, stackIndex, stride);
+            b = bottom;
+            blt = b->leftTriangle;
+            brt = b->rightTriangle;
+            leftTriangle->right = brt;
+            rightTriangle->left = blt;
+            blt->right = rightTriangle;
+            brt->left = leftTriangle;
+            result = true;
          }
       }
       else
       {
-         split(stack, stackIndex);
-         leftChild->right = null;
-         rightChild->left = null;
-         return true;
+         createChildTriangles(stack, stackIndex, stride);
+         leftTriangle->right = null;
+         rightTriangle->left = null;
+         result = true;
       }
-      return false;
+      return result;
    }
 };
